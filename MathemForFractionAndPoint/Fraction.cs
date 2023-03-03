@@ -1,80 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MathemForFractionAndPoint {
-    internal class Fraction : IMathem {
-        long m_iNumerator;
-        long m_iDenominator;
-
-        public Fraction() { Initialize(0, 1); }
-
-
-        private void Initialize(long iNumerator, long iDenominator) {
-            Numerator = iNumerator;
-            Denominator = iDenominator;
-            ReduceFraction(this);
+    internal class Fraction {
+        uint chislitel, znamenatel;
+        public Fraction(uint chislitel, uint znamenatel) {
+            SetChis(chislitel);
+            SetZnam(znamenatel);
         }
-
-        private static long GCD(long iNo1, long iNo2) {
-            // take absolute values
-            if (iNo1 < 0) iNo1 = -iNo1;
-            if (iNo2 < 0) iNo2 = -iNo2;
-
-            do {
-                if (iNo1 < iNo2) {
-                    long tmp = iNo1;
-                    iNo1 = iNo2;
-                    iNo2 = tmp;
-                }
-                iNo1 = iNo1 % iNo2;
-            } while (iNo1 != 0);
-            return iNo2;
+        public void SetChis(uint chislitel) { this.chislitel = chislitel; }
+        public void SetZnam(uint znamenatel) { this.znamenatel = znamenatel; }
+        public uint GetChis() { return chislitel; }
+        public uint GetZnam() { return znamenatel; }
+        public static uint Nod(uint a, uint b) {
+            if (b == 0)
+                return a;
+            return Nod(b, a % b);
         }
-
-        public static void ReduceFraction(Fraction frac) {
-            try {
-                if (frac.Numerator == 0) {
-                    frac.Denominator = 1;
-                    return;
-                }
-
-                long iGCD = GCD(frac.Numerator, frac.Denominator);
-                frac.Numerator /= iGCD;
-                frac.Denominator /= iGCD;
-
-                if (frac.Denominator < 0) {
-                    frac.Numerator *= -1;
-                    frac.Denominator *= -1;
-                }
+        public static Fraction Sokr(Fraction f) {
+            uint nod = Nod(f.chislitel, f.znamenatel);
+            f.chislitel /= nod;
+            f.znamenatel /= nod;
+            return f;
+        }
+        public static Fraction Multiply(Fraction f, uint a) {
+            Fraction z = new Fraction(f.GetChis() * a, f.GetZnam());
+            if (z) return z;
+            else Sokr(z);
+            return z;
+        }
+        public static Fraction Multiply(uint a, Fraction f) {
+            return Multiply(f , a);
+        }
+        public static Boolean operator true(Fraction f) {
+            return (f.chislitel < f.znamenatel);
+        }
+        public static Boolean operator false(Fraction f) {
+            return (f.chislitel > f.znamenatel);
+        }
+        public static Fraction Add(Fraction a, Fraction b) {
+            Fraction f = new Fraction(a.GetChis() * b.GetZnam() + b.GetChis() * a.GetZnam(), a.GetZnam() * b.GetZnam());
+            if (f) return f;
+            else Sokr(f);
+            return f;
+        }
+        public static Fraction Add(Fraction a, double d) {
+            uint znam = 1;
+            while (d > (uint)d) {
+                d *= 10;
+                znam *= 10;
             }
-            catch (Exception exp) {
-                throw new FractionException("Cannot reduce Fraction: " + exp.Message);
-            }
+
+            Fraction f = new Fraction((uint)d, znam);
+            return Add(a, f);
         }
-
-        public long Denominator {
-            get { return m_iDenominator; }
-            set {
-                if (value != 0)
-                    m_iDenominator = value;
-                else
-                    throw new FractionException("Denominator cannot be assigned a ZERO Value");
-            }
-        }
-
-        public long Numerator {
-            get { return m_iNumerator; }
-            set { m_iNumerator = value; }
-        }
-    }
-    public class FractionException : Exception {
-        public FractionException() : base() { }
-
-        public FractionException(string Message) : base(Message) { }
-
-        public FractionException(string Message, Exception InnerException) : base(Message, InnerException) { }
+        public override string ToString() => $"{chislitel} / {znamenatel}" ;
     }
 }
