@@ -6,12 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MathemForFractionAndPoint {
-    internal class Fraction {
+    internal class Fraction : IMathem {
         uint chislitel, znamenatel;
         public Fraction(uint chislitel, uint znamenatel) {
             SetChis(chislitel);
             SetZnam(znamenatel);
         }
+        public Fraction() { }
+        public uint Number1 {
+            set { chislitel = value; } get { return chislitel; } }   
         public void SetChis(uint chislitel) { this.chislitel = chislitel; }
         public void SetZnam(uint znamenatel) { this.znamenatel = znamenatel; }
         public uint GetChis() { return chislitel; }
@@ -27,28 +30,42 @@ namespace MathemForFractionAndPoint {
             f.znamenatel /= nod;
             return f;
         }
-        public static Fraction Multiply(Fraction f, uint a) {
-            Fraction z = new Fraction(f.GetChis() * a, f.GetZnam());
-            if (z) return z;
-            else Sokr(z);
-            return z;
+        public static object Multiply(object a, uint n) {
+            var other = a as Fraction;
+            Fraction f = new Fraction(other.GetChis() * n, other.GetZnam());
+            if (f) return f;
+            else Sokr(f);
+            return f;
         }
-        public static Fraction Multiply(uint a, Fraction f) {
-            return Multiply(f , a);
+        public static object Multiply(uint n, object a) {
+            return Multiply(a , n);
         }
+
+        public static object Multiply(object a, object b) {
+            var other1 = a as Fraction;
+            var other2 = b as Fraction;
+            Fraction f = new Fraction(other1.GetChis() * other2.GetChis(), other1.GetZnam() * other2.GetZnam());
+            if (f) return f;
+            else Sokr(f);
+            return f;
+        }
+
         public static Boolean operator true(Fraction f) {
             return (f.chislitel < f.znamenatel);
         }
         public static Boolean operator false(Fraction f) {
             return (f.chislitel > f.znamenatel);
         }
-        public static Fraction Add(Fraction a, Fraction b) {
-            Fraction f = new Fraction(a.GetChis() * b.GetZnam() + b.GetChis() * a.GetZnam(), a.GetZnam() * b.GetZnam());
+        public static object Add(object a, object b) {
+            var other1 = a as Fraction;
+            var other2 = b as Fraction;
+            Fraction f = new Fraction(other1.GetChis() * other2.GetZnam() + other2.GetChis() * other1.GetZnam(), other1.GetZnam() * other2.GetZnam());
             if (f) return f;
             else Sokr(f);
             return f;
         }
-        public static Fraction Add(Fraction a, double d) {
+        public static object Add(object a, double d) {
+            var other = a as Fraction;
             uint znam = 1;
             while (d > (uint)d) {
                 d *= 10;
@@ -56,7 +73,7 @@ namespace MathemForFractionAndPoint {
             }
 
             Fraction f = new Fraction((uint)d, znam);
-            return Add(a, f);
+            return Add(other, f);
         }
         public override string ToString() => $"{chislitel} / {znamenatel}" ;
     }

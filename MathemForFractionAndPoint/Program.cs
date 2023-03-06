@@ -9,3 +9,8 @@ Fraction fraction = new Fraction(10, 5);
 WriteLine(fraction.ToString());
 Fraction fraction1 = new Fraction(10, 10);
 WriteLine(fraction1.ToString());
+var AddFraction = Fraction.Add(fraction, fraction1);
+WriteLine($"Сложение двух дробей {AddFraction}");
+var MultiplyFraction = Fraction.Multiply(fraction, fraction1);
+WriteLine($"Умножение двух дробей {MultiplyFraction}");
+

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace MathemForFractionAndPoint {
     internal interface IMathem {
-        public object Add(object obj, object obj2);
-        public object Subtract(object obj, object obj2);
-        public object Multiply(object obj, object obj2);
-        public object Divide(object obj, object obj2);
+        static object Add(object obj, object obj2) { return Add(obj, obj2); }
+
+        //object Subtract(object obj, object obj2);
+        static object Multiply(object obj, Object obj2) { return Multiply(obj, obj2); }
+        //object Divide(object obj, object obj2);
 
     }
 }
