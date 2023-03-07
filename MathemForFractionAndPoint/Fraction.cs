@@ -30,6 +30,12 @@ namespace MathemForFractionAndPoint {
             f.znamenatel /= nod;
             return f;
         }
+        public static object Reverse(Fraction f) {
+            uint temp = f.chislitel;
+            f.chislitel = f.znamenatel;
+            f.znamenatel = temp;
+            return f;
+        }
         public static object Multiply(object a, uint n) {
             var other = a as Fraction;
             Fraction f = new Fraction(other.GetChis() * n, other.GetZnam());
@@ -105,6 +111,15 @@ namespace MathemForFractionAndPoint {
                 f.znamenatel += other1New.znamenatel;
 
             }
+            return f;
+        }
+
+        public static object Divide(object a, object b) {
+            var other1 = a as Fraction;
+            var other2 = b as Fraction;
+            var temp = Fraction.Reverse(other2);
+            var MyltiplyFraction = Fraction.Multiply(other1, temp);
+            Fraction f = (Fraction)MyltiplyFraction;
             return f;
         }
         public override string ToString() => $"{chislitel} / {znamenatel}" ;
