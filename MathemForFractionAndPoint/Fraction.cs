@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static System.Console;
 namespace MathemForFractionAndPoint {
     internal class Fraction : IMathem {
         uint chislitel, znamenatel;
@@ -74,6 +74,38 @@ namespace MathemForFractionAndPoint {
 
             Fraction f = new Fraction((uint)d, znam);
             return Add(other, f);
+        }
+
+        private static long GCD(long iNo1, long iNo2) {
+            if (iNo1 < 0) iNo1 = -iNo1;
+            if (iNo2 < 0) iNo2 = -iNo2;
+
+            do {
+                if (iNo1 < iNo2) {
+                    long tmp = iNo1;
+                    iNo1 = iNo2;
+                    iNo2 = tmp;
+                }
+                iNo1 = iNo1 % iNo2;
+            } while (iNo1 != 0);
+            return iNo2;
+        }
+        public static object Subtract(object a, object b) {
+            var other1 = a as Fraction;
+            var other2 = b as Fraction;
+            Fraction f = new Fraction();
+            if (other1.znamenatel == other2.znamenatel) {
+                f.chislitel = other1.chislitel - other2.chislitel;
+                f.znamenatel = other1.znamenatel;
+            }
+            else {
+                Fraction other1New = new Fraction(other1.chislitel * other2.znamenatel, other1.znamenatel * other2.znamenatel);
+                Fraction other2New = new Fraction(other2.chislitel * other1.znamenatel, other2.znamenatel*other1.znamenatel);
+                f.chislitel = other1New.chislitel - other2New.chislitel;
+                f.znamenatel += other1New.znamenatel;
+
+            }
+            return f;
         }
         public override string ToString() => $"{chislitel} / {znamenatel}" ;
     }

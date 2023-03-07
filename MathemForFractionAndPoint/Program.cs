@@ -13,4 +13,5 @@ var AddFraction = Fraction.Add(fraction, fraction1);
 WriteLine($"Сложение двух дробей {AddFraction}");
 var MultiplyFraction = Fraction.Multiply(fraction, fraction1);
 WriteLine($"Умножение двух дробей {MultiplyFraction}");
-
+var SubtractFraction = Fraction.Subtract(fraction, fraction1);
+WriteLine($"Вычитание двух дробей {SubtractFraction}");
