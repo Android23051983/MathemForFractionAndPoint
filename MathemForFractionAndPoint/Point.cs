@@ -7,7 +7,7 @@ using static System.Math;
 using static System.Console;
 
 namespace MathemForFractionAndPoint {
-    internal class Point : object, IMathem {
+    internal class Point : IMathem {
         double x;
         double y;
 
@@ -41,31 +41,42 @@ namespace MathemForFractionAndPoint {
             return distance;
         }
 
-        public static Point Add(Point obj1, Point obj2) {
-        
-            double iX = obj1.X + obj2.X;
-            double iY = obj1.Y + obj2.Y;
+        public static object Add(object a, object b) {
+            var other1 = a as Point;
+            var other2 = b as Point;
+            double iX = other1.X + other2.X;
+            double iY = other1.Y + other2.Y;
+            return new Point(iX, iY);
+        }
+
+        public static object Subtract(object a, object b) {
+            var other1 = a as Point;
+            var other2 = b as Point;
+            double iX = other1.X - other2.X;
+            double iY = other1.Y - other2.Y;
+            return new Point(iX, iY);
+        }
+
+        public static object Multiply(object a, object b) {
+            var other1 = a as Point;
+            var other2 = b as Point;
+            double iX = other1.X * other2.X;
+            double iY = other1.Y * other2.Y;
+            return new Point(iX, iY);
+        }
+
+        public static object Divide(object a, object b) {
+            var other1 = a as Point;
+            var other2 = b as Point;
+            double iX = other1.X / other2.X;
+            double iY = other1.Y / other2.Y;
             return new Point(iX, iY);
         }
 
 
 
-        public override string ToString() => $"X = {x} Y = {y}";
+        public override string ToString() => $"X = {x}, Y = {y}";
 
-        public object Add(object obj, object obj2) {
-            throw new NotImplementedException();
-        }
 
-        public object Subtract(object obj, object obj2) {
-            throw new NotImplementedException();
-        }
-
-        public object Multiply(object obj, object obj2) {
-            throw new NotImplementedException();
-        }
-
-        public object Divide(object obj, object obj2) {
-            throw new NotImplementedException();
-        }
     }
 }
